@@ -15,24 +15,53 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Poppins,sans-serif;background:#fff;color:#333}
-header, footer{background:linear-gradient(135deg,#e23744,#ff6f61);color:#fff;text-align:center;padding:24px 20px;}
+
+header, footer{
+  background:linear-gradient(135deg,#e23744,#ff6f61);
+  color:#fff;
+  text-align:center;
+  padding:24px 20px;
+}
+
 .logo{width:130px;background:#fff;padding:10px;border-radius:16px;margin-bottom:10px;}
 .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
 .btn{padding:12px 20px;border-radius:30px;border:none;font-weight:600;cursor:pointer;}
 .call{background:#fff;color:#e23744}
 .wa{background:#25D366;color:#fff}
-/* HIDDEN BY DEFAULT */
 .install-btn{background:#000;color:#fff;display:none;} 
+
 section{padding:30px 20px}
 h2{text-align:center;margin-bottom:12px}
+
+/* Slogan Styling */
+.slogan {
+  text-align:center; 
+  margin:16px 0; 
+  font-weight:700; 
+  background: linear-gradient(135deg,#e23744,#ff6f61);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size:1.1rem;
+}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;}
 .card{background:#fff;padding:14px;border-radius:14px;text-align:center;box-shadow:0 5px 14px rgba(0,0,0,.1);}
-.counter{display:flex;justify-content:center;align-items:center;gap:16px;margin:14px 0;}
-.counter button{width:36px;height:36px;border-radius:50%;border:none;background:#e23744;color:#fff;font-size:20px;}
+
+.counter-group {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.counter-label { font-weight: 600; margin-bottom: 8px; display: block; }
+.counter{display:flex;justify-content:center;align-items:center;gap:16px;margin:8px 0;}
+.counter button{width:36px;height:36px;border-radius:50%;border:none;background:#e23744;color:#fff;font-size:20px;cursor:pointer;}
+
 .summary{max-width:420px;margin:0 auto;background:#fafafa;padding:16px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.1);}
 .summary div{display:flex;justify-content:space-between;margin-bottom:8px;}
-.total{font-weight:700;font-size:1.1rem}
+.total{font-weight:700;font-size:1.1rem; border-top: 1px solid #ddd; padding-top: 8px; margin-top: 8px;}
+
 .pricing-box{max-width:500px;margin:0 auto;background:#fff;padding:16px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.1);font-size:.95rem;}
+.pricing-box p{margin-bottom:8px}
+
 .float{position:fixed;right:16px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:999;}
 .float.call{bottom:90px;background:#e23744}
 .float.wa{bottom:20px;background:#25D366}
@@ -60,6 +89,7 @@ h2{text-align:center;margin-bottom:12px}
     <div class="card">💊 Medicines</div><div class="card">⛽ Petrol</div><div class="card">💧 Water Can</div>
     <div class="card">🥤 Cool Drinks</div><div class="card">📦 Pick & Drop</div><div class="card">🏪 Any Shop</div>
   </div>
+  <p class="slogan">📞 Call us to tell what items you want – we deliver anything!</p>
 </section>
 
 <section>
@@ -68,61 +98,95 @@ h2{text-align:center;margin-bottom:12px}
     <p>✔ Up to 5 items – ₹30</p>
     <p>✔ 6 to 10 items – ₹50</p>
     <p>✔ More than 10 items – ₹80</p>
+    <p>✔ Other town delivery – ₹100</p>
     <p>✔ Extra shop – ₹10 per shop</p>
   </div>
 </section>
 
 <section>
   <h2>📦 Order Summary</h2>
-  <div class="counter">
-    <button onclick="changeItems(-1)">−</button><span id="items">1</span><button onclick="changeItems(1)">+</button>
+  
+  <div class="counter-group">
+    <span class="counter-label">Number of Items</span>
+    <div class="counter">
+      <button onclick="changeItems(-1)">−</button>
+      <span id="items">1</span>
+      <button onclick="changeItems(1)">+</button>
+    </div>
   </div>
-  <div class="counter">
-    <button onclick="changeShops(-1)">−</button><span id="shops">0</span><button onclick="changeShops(1)">+</button>
+
+  <div class="counter-group">
+    <span class="counter-label">Extra Shops</span>
+    <div class="counter">
+      <button onclick="changeShops(-1)">−</button>
+      <span id="shops">0</span>
+      <button onclick="changeShops(1)">+</button>
+    </div>
   </div>
-  <label style="display:block;text-align:center;margin:10px">
+
+  <label style="display:block;text-align:center;margin:10px; cursor:pointer;">
     <input type="checkbox" id="otherTown" onchange="calculate()"> Other Town Delivery
   </label>
+
   <div class="summary">
     <div><span>Delivery Charge</span><span>₹<span id="charge">30</span></span></div>
-    <div><span>Extra Shops</span><span>₹<span id="extraCharge">0</span></span></div>
+    <div><span>Extra Shop Charge</span><span>₹<span id="extraCharge">0</span></span></div>
     <div class="total"><span>Total</span><span>₹<span id="total">30</span></span></div>
   </div>
+
+  <p class="slogan">⚡ After selecting the number of items and extra shops, tap the WhatsApp button to confirm your order.</p>
 </section>
+
+<footer>
+  Serving Kagaznagar with Fast & Trusted Delivery
+</footer>
 
 <div class="float call" onclick="callNow()"><i class="fa-solid fa-phone"></i></div>
 <div class="float wa" onclick="orderWhatsApp()"><i class="fa-brands fa-whatsapp"></i></div>
 
 <script>
 let items=1, shops=0;
+
 function calculate(){
-  let delivery = document.getElementById("otherTown").checked ? 100 : (items<=5 ? 30 : (items<=10 ? 50 : 80));
+  let delivery = 30;
+  if(document.getElementById("otherTown").checked){
+    delivery = 100;
+  } else if(items<=5){
+    delivery = 30;
+  } else if(items<=10){
+    delivery = 50;
+  } else {
+    delivery = 80;
+  }
   let extra = shops * 10;
-  document.getElementById("charge").innerText=delivery;
-  document.getElementById("extraCharge").innerText=extra;
-  document.getElementById("total").innerText=delivery+extra;
+  document.getElementById("charge").innerText = delivery;
+  document.getElementById("extraCharge").innerText = extra;
+  document.getElementById("total").innerText = delivery + extra;
 }
+
 function changeItems(v){ items=Math.max(1,items+v); document.getElementById("items").innerText=items; calculate(); }
 function changeShops(v){ shops=Math.max(0,shops+v); document.getElementById("shops").innerText=shops; calculate(); }
 function callNow(){ location.href="tel:9494378247"; }
+
 function orderWhatsApp(){
-  let msg=`Mana Delivery – Kagaznagar\nItems: ${items}\nShops: ${shops}\nTotal: ₹${document.getElementById("total").innerText}\nLocation:`;
+  let msg=`Mana Delivery – Kagaznagar\n📞 9494378247\n\nItems Count: ${items}\nExtra Shops: ${shops}\nDelivery Charge: ₹${document.getElementById("charge").innerText}\nExtra Shop Charge: ₹${document.getElementById("extraCharge").innerText}\n---------------------\nTOTAL: ₹${document.getElementById("total").innerText}\n\nCustomer Location:`;
+  
   navigator.geolocation.getCurrentPosition(pos=>{
     msg+=` https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
     window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`);
   },()=>{ window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`); });
 }
 
-/* --- SERVICE WORKER --- */
+/* Service Worker */
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('./service-worker.js'); }
 
-/* --- ANDROID INSTALL LOGIC --- */
+/* Android Install */
 let deferredPrompt;
 const btnAndroid = document.getElementById('installBtnAndroid');
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  btnAndroid.style.display = 'inline-block'; // Only shows on Android
+  btnAndroid.style.display = 'inline-block';
 });
 btnAndroid.addEventListener('click', async () => {
   if (deferredPrompt) {
@@ -133,14 +197,14 @@ btnAndroid.addEventListener('click', async () => {
   }
 });
 
-/* --- iOS INSTALL LOGIC --- */
+/* iOS Install */
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isSafari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS/i.test(navigator.userAgent);
 const btniOS = document.getElementById("installBtniOS");
 if (isIOS && isSafari && !window.navigator.standalone) {
-  btniOS.style.display = "inline-block"; // Only shows on iPhone
+  btniOS.style.display = "inline-block";
 }
-btniOS.onclick = () => alert("iPhone Install:\n1. Tap Share\n2. Tap 'Add to Home Screen'");
+btniOS.onclick = () => alert("To install on iPhone:\n1. Tap Share icon\n2. Tap 'Add to Home Screen'\n3. Tap Add");
 </script>
 </body>
-</html> 
+</html>
