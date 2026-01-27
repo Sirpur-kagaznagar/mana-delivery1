@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mana Delivery – Kagaznagar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#e23744">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Poppins,sans-serif;background:#fff;color:#333}
+header, footer{background:linear-gradient(135deg,#e23744,#ff6f61);color:#fff;text-align:center;padding:24px 20px;}
+.logo{width:130px;background:#fff;padding:10px;border-radius:16px;margin-bottom:10px;}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.btn{padding:12px 20px;border-radius:30px;border:none;font-weight:600;cursor:pointer;}
+.call{background:#fff;color:#e23744}
+.wa{background:#25D366;color:#fff}
+/* HIDDEN BY DEFAULT */
+.install-btn{background:#000;color:#fff;display:none;} 
+section{padding:30px 20px}
+h2{text-align:center;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;}
+.card{background:#fff;padding:14px;border-radius:14px;text-align:center;box-shadow:0 5px 14px rgba(0,0,0,.1);}
+.counter{display:flex;justify-content:center;align-items:center;gap:16px;margin:14px 0;}
+.counter button{width:36px;height:36px;border-radius:50%;border:none;background:#e23744;color:#fff;font-size:20px;}
+.summary{max-width:420px;margin:0 auto;background:#fafafa;padding:16px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.summary div{display:flex;justify-content:space-between;margin-bottom:8px;}
+.total{font-weight:700;font-size:1.1rem}
+.pricing-box{max-width:500px;margin:0 auto;background:#fff;padding:16px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.1);font-size:.95rem;}
+.float{position:fixed;right:16px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:999;}
+.float.call{bottom:90px;background:#e23744}
+.float.wa{bottom:20px;background:#25D366}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="./logo.png" class="logo" alt="Mana Delivery Logo">
+  <h1>Mana Delivery</h1>
+  <p>Fast & Trusted Delivery – Kagaznagar</p>
+  <div class="btns">
+    <button class="btn call" onclick="callNow()">Call Now</button>
+    <button class="btn wa" onclick="orderWhatsApp()">WhatsApp Order</button>
+    <button class="btn install-btn" id="installBtnAndroid">📲 Add to Home Screen</button>
+    <button class="btn install-btn" id="installBtniOS">🍎 Install on iPhone</button>
+  </div>
+</header>
+
+<section>
+  <h2>🛍 What We Deliver</h2>
+  <div class="grid">
+    <div class="card">🛒 Groceries</div><div class="card">🍔 Food</div><div class="card">🍢 Street Food</div>
+    <div class="card">🍗 Chicken</div><div class="card">🥩 Mutton</div><div class="card">🐟 Fish</div>
+    <div class="card">💊 Medicines</div><div class="card">⛽ Petrol</div><div class="card">💧 Water Can</div>
+    <div class="card">🥤 Cool Drinks</div><div class="card">📦 Pick & Drop</div><div class="card">🏪 Any Shop</div>
+  </div>
+</section>
+
+<section>
+  <h2>💰 Pricing</h2>
+  <div class="pricing-box">
+    <p>✔ Up to 5 items – ₹30</p>
+    <p>✔ 6 to 10 items – ₹50</p>
+    <p>✔ More than 10 items – ₹80</p>
+    <p>✔ Extra shop – ₹10 per shop</p>
+  </div>
+</section>
+
+<section>
+  <h2>📦 Order Summary</h2>
+  <div class="counter">
+    <button onclick="changeItems(-1)">−</button><span id="items">1</span><button onclick="changeItems(1)">+</button>
+  </div>
+  <div class="counter">
+    <button onclick="changeShops(-1)">−</button><span id="shops">0</span><button onclick="changeShops(1)">+</button>
+  </div>
+  <label style="display:block;text-align:center;margin:10px">
+    <input type="checkbox" id="otherTown" onchange="calculate()"> Other Town Delivery
+  </label>
+  <div class="summary">
+    <div><span>Delivery Charge</span><span>₹<span id="charge">30</span></span></div>
+    <div><span>Extra Shops</span><span>₹<span id="extraCharge">0</span></span></div>
+    <div class="total"><span>Total</span><span>₹<span id="total">30</span></span></div>
+  </div>
+</section>
+
+<div class="float call" onclick="callNow()"><i class="fa-solid fa-phone"></i></div>
+<div class="float wa" onclick="orderWhatsApp()"><i class="fa-brands fa-whatsapp"></i></div>
+
+<script>
+let items=1, shops=0;
+function calculate(){
+  let delivery = document.getElementById("otherTown").checked ? 100 : (items<=5 ? 30 : (items<=10 ? 50 : 80));
+  let extra = shops * 10;
+  document.getElementById("charge").innerText=delivery;
+  document.getElementById("extraCharge").innerText=extra;
+  document.getElementById("total").innerText=delivery+extra;
+}
+function changeItems(v){ items=Math.max(1,items+v); document.getElementById("items").innerText=items; calculate(); }
+function changeShops(v){ shops=Math.max(0,shops+v); document.getElementById("shops").innerText=shops; calculate(); }
+function callNow(){ location.href="tel:9494378247"; }
+function orderWhatsApp(){
+  let msg=`Mana Delivery – Kagaznagar\nItems: ${items}\nShops: ${shops}\nTotal: ₹${document.getElementById("total").innerText}\nLocation:`;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    msg+=` https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+    window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`);
+  },()=>{ window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`); });
+}
+
+/* --- SERVICE WORKER --- */
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('./service-worker.js'); }
+
+/* --- ANDROID INSTALL LOGIC --- */
+let deferredPrompt;
+const btnAndroid = document.getElementById('installBtnAndroid');
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  btnAndroid.style.display = 'inline-block'; // Only shows on Android
+});
+btnAndroid.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') btnAndroid.style.display = 'none';
+    deferredPrompt = null;
+  }
+});
+
+/* --- iOS INSTALL LOGIC --- */
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isSafari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS/i.test(navigator.userAgent);
+const btniOS = document.getElementById("installBtniOS");
+if (isIOS && isSafari && !window.navigator.standalone) {
+  btniOS.style.display = "inline-block"; // Only shows on iPhone
+}
+btniOS.onclick = () => alert("iPhone Install:\n1. Tap Share\n2. Tap 'Add to Home Screen'");
+</script>
+</body>
+</html> 
