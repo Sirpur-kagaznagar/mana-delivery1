@@ -33,7 +33,6 @@ header, footer{
 section{padding:30px 20px}
 h2{text-align:center;margin-bottom:12px}
 
-/* Slogan Styling */
 .slogan {
   text-align:center; 
   margin:16px 0; 
@@ -47,10 +46,7 @@ h2{text-align:center;margin-bottom:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;}
 .card{background:#fff;padding:14px;border-radius:14px;text-align:center;box-shadow:0 5px 14px rgba(0,0,0,.1);}
 
-.counter-group {
-  margin-bottom: 30px;
-  text-align: center;
-}
+.counter-group { margin-bottom: 30px; text-align: center; }
 .counter-label { font-weight: 600; margin-bottom: 8px; display: block; }
 .counter{display:flex;justify-content:center;align-items:center;gap:16px;margin:8px 0;}
 .counter button{width:36px;height:36px;border-radius:50%;border:none;background:#e23744;color:#fff;font-size:20px;cursor:pointer;}
@@ -62,9 +58,20 @@ h2{text-align:center;margin-bottom:12px}
 .pricing-box{max-width:500px;margin:0 auto;background:#fff;padding:16px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.1);font-size:.95rem;}
 .pricing-box p{margin-bottom:8px}
 
-.float{position:fixed;right:16px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:999;}
-.float.call{bottom:90px;background:#e23744}
-.float.wa{bottom:20px;background:#25D366}
+/* Action area at the bottom of the Order Summary */
+.action-area {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.action-area .btn { flex: 1; padding: 16px 10px; font-size: 0.95rem; }
+
+/* Only the call float remains */
+.float{position:fixed;right:16px;bottom:20px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:999;background:#e23744;}
 </style>
 </head>
 <body>
@@ -89,7 +96,7 @@ h2{text-align:center;margin-bottom:12px}
     <div class="card">💊 Medicines</div><div class="card">⛽ Petrol</div><div class="card">💧 Water Can</div>
     <div class="card">🥤 Cool Drinks</div><div class="card">📦 Pick & Drop</div><div class="card">🏪 Any Shop</div>
   </div>
-  <p class="slogan">📞 Call us to tell what items you want – we deliver anything!</p>
+  <p class="slogan">📞 One call. Any delivery.</p>
 </section>
 
 <section>
@@ -98,7 +105,7 @@ h2{text-align:center;margin-bottom:12px}
     <p>✔ Up to 5 items – ₹30</p>
     <p>✔ 6 to 10 items – ₹50</p>
     <p>✔ More than 10 items – ₹80</p>
-    <p>✔ Other town delivery – ₹100</p>
+    <p>✔ Other town delivery – Extra ₹100/-</p>
     <p>✔ Extra shop – ₹10 per shop</p>
   </div>
 </section>
@@ -134,15 +141,21 @@ h2{text-align:center;margin-bottom:12px}
     <div class="total"><span>Total</span><span>₹<span id="total">30</span></span></div>
   </div>
 
-  <p class="slogan">⚡ After selecting the number of items and extra shops, tap the WhatsApp button to confirm your order.</p>
+  <div class="action-area">
+    <button class="btn call" style="border: 2px solid #e23744; color: #e23744;" onclick="callNow()">
+      <i class="fa-solid fa-phone"></i> Call Now
+    </button>
+    <button class="btn wa" style="box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);" onclick="orderWhatsApp()">
+      <i class="fa-brands fa-whatsapp"></i> Confirm Order
+    </button>
+  </div>
 </section>
 
 <footer>
   Serving Kagaznagar with Fast & Trusted Delivery
 </footer>
 
-<div class="float call" onclick="callNow()"><i class="fa-solid fa-phone"></i></div>
-<div class="float wa" onclick="orderWhatsApp()"><i class="fa-brands fa-whatsapp"></i></div>
+<div class="float" onclick="callNow()"><i class="fa-solid fa-phone"></i></div>
 
 <script>
 let items=1, shops=0;
@@ -150,7 +163,7 @@ let items=1, shops=0;
 function calculate(){
   let delivery = 30;
   if(document.getElementById("otherTown").checked){
-    delivery = 100;
+    delivery = 130; 
   } else if(items<=5){
     delivery = 30;
   } else if(items<=10){
@@ -169,18 +182,28 @@ function changeShops(v){ shops=Math.max(0,shops+v); document.getElementById("sho
 function callNow(){ location.href="tel:9494378247"; }
 
 function orderWhatsApp(){
-  let msg=`Mana Delivery – Kagaznagar\n📞 9494378247\n\nItems Count: ${items}\nExtra Shops: ${shops}\nDelivery Charge: ₹${document.getElementById("charge").innerText}\nExtra Shop Charge: ₹${document.getElementById("extraCharge").innerText}\n---------------------\nTOTAL: ₹${document.getElementById("total").innerText}\n\nCustomer Location:`;
+  let total = document.getElementById("total").innerText;
+  let delCharge = document.getElementById("charge").innerText;
+  let shopCharge = document.getElementById("extraCharge").innerText;
   
-  navigator.geolocation.getCurrentPosition(pos=>{
-    msg+=` https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-    window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`);
-  },()=>{ window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`); });
+  let msg = `*Mana Delivery – Kagaznagar*\n✅ *NEW ORDER CONFIRMED*\n-------------------------\n📦 *Items:* ${items}\n🏪 *Shops:* ${shops}\n-------------------------\n💰 *Delivery:* ₹${delCharge}\n🏪 *Extra Shop Fee:* ₹${shopCharge}\n⭐ *TOTAL:* ₹${total}\n-------------------------\n📍 *Location:*`;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      let mapUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+      msg += `\n${mapUrl}`;
+      window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`, "_blank");
+    }, () => {
+      msg += ` (Location not shared)`;
+      window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`, "_blank");
+    });
+  } else {
+    window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`, "_blank");
+  }
 }
 
-/* Service Worker */
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('./service-worker.js'); }
 
-/* Android Install */
 let deferredPrompt;
 const btnAndroid = document.getElementById('installBtnAndroid');
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -197,7 +220,6 @@ btnAndroid.addEventListener('click', async () => {
   }
 });
 
-/* iOS Install */
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isSafari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS/i.test(navigator.userAgent);
 const btniOS = document.getElementById("installBtniOS");
