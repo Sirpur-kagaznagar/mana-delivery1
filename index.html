@@ -25,7 +25,10 @@ header, footer{
 
 .logo{width:130px;background:#fff;padding:10px;border-radius:16px;margin-bottom:10px;}
 .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
-.btn{padding:12px 20px;border-radius:30px;border:none;font-weight:600;cursor:pointer;}
+
+.btn{padding:12px 20px;border-radius:30px;border:none;font-weight:600;cursor:pointer;transition: transform 0.1s ease, opacity 0.2s;}
+.btn:active{transform: scale(0.95); opacity: 0.9;}
+
 .call{background:#fff;color:#e23744}
 .wa{background:#25D366;color:#fff}
 .install-btn{background:#000;color:#fff;display:none;} 
@@ -49,16 +52,17 @@ h2{text-align:center;margin-bottom:12px}
 .counter-group { margin-bottom: 30px; text-align: center; }
 .counter-label { font-weight: 600; margin-bottom: 8px; display: block; }
 .counter{display:flex;justify-content:center;align-items:center;gap:16px;margin:8px 0;}
-.counter button{width:36px;height:36px;border-radius:50%;border:none;background:#e23744;color:#fff;font-size:20px;cursor:pointer;}
+
+.counter button{width:36px;height:36px;border-radius:50%;border:none;background:#e23744;color:#fff;font-size:20px;cursor:pointer;transition: transform 0.1s ease;}
+.counter button:active{transform: scale(0.85);}
 
 .summary{max-width:420px;margin:0 auto;background:#fafafa;padding:16px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.1);}
 .summary div{display:flex;justify-content:space-between;margin-bottom:8px;}
 .total{font-weight:700;font-size:1.1rem; border-top: 1px solid #ddd; padding-top: 8px; margin-top: 8px;}
 
 .pricing-box{max-width:500px;margin:0 auto;background:#fff;padding:16px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.1);font-size:.95rem;}
-.pricing-box p{margin-bottom:8px}
+.pricing-box p{margin-bottom:8px; text-align: center;}
 
-/* Action area at the bottom of the Order Summary */
 .action-area {
   display: flex;
   gap: 10px;
@@ -70,8 +74,8 @@ h2{text-align:center;margin-bottom:12px}
 }
 .action-area .btn { flex: 1; padding: 16px 10px; font-size: 0.95rem; }
 
-/* Only the call float remains */
-.float{position:fixed;right:16px;bottom:20px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:999;background:#e23744;}
+.float{position:fixed;right:16px;bottom:20px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:999;background:#e23744;transition: transform 0.1s ease;}
+.float:active{transform: scale(0.9);}
 </style>
 </head>
 <body>
@@ -102,9 +106,7 @@ h2{text-align:center;margin-bottom:12px}
 <section>
   <h2>💰 Pricing</h2>
   <div class="pricing-box">
-    <p>✔ Up to 5 items – ₹30</p>
-    <p>✔ 6 to 10 items – ₹50</p>
-    <p>✔ More than 10 items – ₹80</p>
+    <p>✔ Delivery Charge – ₹40</p>
     <p>✔ Other town delivery – Extra ₹100/-</p>
     <p>✔ Extra shop – ₹10 per shop</p>
   </div>
@@ -113,15 +115,6 @@ h2{text-align:center;margin-bottom:12px}
 <section>
   <h2>📦 Order Summary</h2>
   
-  <div class="counter-group">
-    <span class="counter-label">Number of Items</span>
-    <div class="counter">
-      <button onclick="changeItems(-1)">−</button>
-      <span id="items">1</span>
-      <button onclick="changeItems(1)">+</button>
-    </div>
-  </div>
-
   <div class="counter-group">
     <span class="counter-label">Extra Shops</span>
     <div class="counter">
@@ -136,9 +129,9 @@ h2{text-align:center;margin-bottom:12px}
   </label>
 
   <div class="summary">
-    <div><span>Delivery Charge</span><span>₹<span id="charge">30</span></span></div>
+    <div><span>Delivery Charge</span><span>₹<span id="charge">40</span></span></div>
     <div><span>Extra Shop Charge</span><span>₹<span id="extraCharge">0</span></span></div>
-    <div class="total"><span>Total</span><span>₹<span id="total">30</span></span></div>
+    <div class="total"><span>Total</span><span>₹<span id="total">40</span></span></div>
   </div>
 
   <div class="action-area">
@@ -158,18 +151,12 @@ h2{text-align:center;margin-bottom:12px}
 <div class="float" onclick="callNow()"><i class="fa-solid fa-phone"></i></div>
 
 <script>
-let items=1, shops=0;
+let shops=0;
 
 function calculate(){
-  let delivery = 30;
+  let delivery = 40;
   if(document.getElementById("otherTown").checked){
-    delivery = 130; 
-  } else if(items<=5){
-    delivery = 30;
-  } else if(items<=10){
-    delivery = 50;
-  } else {
-    delivery = 80;
+    delivery = 140; 
   }
   let extra = shops * 10;
   document.getElementById("charge").innerText = delivery;
@@ -177,7 +164,6 @@ function calculate(){
   document.getElementById("total").innerText = delivery + extra;
 }
 
-function changeItems(v){ items=Math.max(1,items+v); document.getElementById("items").innerText=items; calculate(); }
 function changeShops(v){ shops=Math.max(0,shops+v); document.getElementById("shops").innerText=shops; calculate(); }
 function callNow(){ location.href="tel:9494378247"; }
 
@@ -186,7 +172,7 @@ function orderWhatsApp(){
   let delCharge = document.getElementById("charge").innerText;
   let shopCharge = document.getElementById("extraCharge").innerText;
   
-  let msg = `*Mana Delivery – Kagaznagar*\n✅ *NEW ORDER CONFIRMED*\n-------------------------\n📦 *Items:* ${items}\n🏪 *Shops:* ${shops}\n-------------------------\n💰 *Delivery:* ₹${delCharge}\n🏪 *Extra Shop Fee:* ₹${shopCharge}\n⭐ *TOTAL:* ₹${total}\n-------------------------\n📍 *Location:*`;
+  let msg = `*Mana Delivery – Kagaznagar*\n✅ *NEW ORDER CONFIRMED*\n-------------------------\n🏪 *Extra Shops:* ${shops}\n-------------------------\n💰 *Delivery:* ₹${delCharge}\n🏪 *Extra Shop Fee:* ₹${shopCharge}\n⭐ *TOTAL:* ₹${total}\n-------------------------\n📍 *Location:*`;
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(pos => {
