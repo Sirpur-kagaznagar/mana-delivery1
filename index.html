@@ -26,7 +26,6 @@ header, footer{
 .logo{width:130px;background:#fff;padding:10px;border-radius:16px;margin-bottom:10px;}
 .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
 
-/* Tappable effect for buttons */
 .btn{padding:12px 20px;border-radius:30px;border:none;font-weight:600;cursor:pointer;transition: transform 0.1s ease, opacity 0.2s;}
 .btn:active{transform: scale(0.95); opacity: 0.9;}
 
@@ -173,27 +172,32 @@ function orderWhatsApp(){
   let delCharge = document.getElementById("charge").innerText;
   let shopCharge = document.getElementById("extraCharge").innerText;
   
-  // Cleaned up the message string
-  let msg = `*Mana Delivery – Kagaznagar*\n✅ *NEW ORDER CONFIRMED*\n-------------------------\n🏪 *Shops:* ${shops}\n-------------------------\n💰 *Delivery:* ₹${delCharge}\n🏪 *Extra Shop Fee:* ₹${shopCharge}\n⭐ *TOTAL:* ₹${total}\n-------------------------`;
+  let msg = `*Mana Delivery – Kagaznagar*\n✅ *NEW ORDER CONFIRMED*\n-------------------------\n🏪 *Extra Shops:* ${shops}\n-------------------------\n💰 *Delivery:* ₹${delCharge}\n🏪 *Extra Shop Fee:* ₹${shopCharge}\n⭐ *TOTAL:* ₹${total}\n-------------------------`;
 
+  // Added a fallback: If Geolocation fails or takes too long, we still open WhatsApp
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      // FIXED THE URL FORMAT HERE
-      let mapUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-      let finalMsg = msg + `\n📍 *Location:* ${mapUrl}`;
-      window.open(`https://wa.me/919494378247?text=${encodeURIComponent(finalMsg)}`, "_blank");
-    }, () => {
-      let finalMsg = msg + `\n📍 *Location:* (Not shared - please type address)`;
-      window.open(`https://wa.me/919494378247?text=${encodeURIComponent(finalMsg)}`, "_blank");
-    });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        // Corrected URL format
+        let mapUrl = "https://www.google.com/maps?q=" + lat + "," + lon;
+        let finalMsg = msg + "\n📍 *Location:* " + mapUrl;
+        window.open("https://wa.me/919494378247?text=" + encodeURIComponent(finalMsg), "_blank");
+      }, 
+      (err) => {
+        // Fallback if user denies location
+        window.open("https://wa.me/919494378247?text=" + encodeURIComponent(msg + "\n📍 *Location:* (Address typed manually)"), "_blank");
+      },
+      { timeout: 5000 } // Don't wait more than 5 seconds for GPS
+    );
   } else {
-    window.open(`https://wa.me/919494378247?text=${encodeURIComponent(msg)}`, "_blank");
+    window.open("https://wa.me/919494378247?text=" + encodeURIComponent(msg), "_blank");
   }
 }
 
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('./service-worker.js'); }
 
-// PWA Install Logic
 let deferredPrompt;
 const btnAndroid = document.getElementById('installBtnAndroid');
 window.addEventListener('beforeinstallprompt', (e) => {
